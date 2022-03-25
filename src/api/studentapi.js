@@ -10,6 +10,5 @@ const studentApi = {
     });
   },
 };
-const studentDelete = {};
 
 export default studentApi;
