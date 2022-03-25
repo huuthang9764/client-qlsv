@@ -3,7 +3,7 @@ import facultyApi from "api/facultyapi";
 import axios from "axios";
 
 import React, { useEffect, useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 
 const AddStudent = (props) => {
   const [faculty, setFaculty] = useState([]);
@@ -26,8 +26,7 @@ const AddStudent = (props) => {
   const handleShow = () => setShow(true);
 
   const handleForm = (e) => {
-    let data = e.target;
-    setStudent({ ...student, [data.name]: data.value });
+    setStudent({ ...student, [e.target.name]: e.target.value });
   };
   useEffect(() => {
     (async () => {
@@ -53,6 +52,7 @@ const AddStudent = (props) => {
   }, []);
 
   const add = (data) => {
+    console.log(data);
     let token = localStorage.getItem("token");
     axios
       .post("https://xdpm.herokuapp.com/api/students", data, {
@@ -160,9 +160,9 @@ const AddStudent = (props) => {
                   <span>Mã khoa</span>
                 </div>
                 <div className="form__input">
-                  <select onChange={(e) => handleForm(e)}>
+                  <select name="makhoa" onChange={(e) => handleForm(e)}>
                     {faculty.map((item, i) => (
-                      <option name="makhoa" value={item.id} key={i}>
+                      <option key={i} value={item.id} required>
                         {item.tenkhoa}
                       </option>
                     ))}
@@ -185,9 +185,9 @@ const AddStudent = (props) => {
                   <span>Mã Lớp</span>
                 </div>
                 <div className="form__input">
-                  <select onChange={(e) => handleForm(e)}>
+                  <select name="malop" onChange={(e) => handleForm(e)}>
                     {lop.map((item, i) => (
-                      <option name="malop" value={item.id} key={i}>
+                      <option value={item.id} key={i}>
                         {item.tenlop}
                       </option>
                     ))}
