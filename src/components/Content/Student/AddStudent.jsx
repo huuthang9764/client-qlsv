@@ -81,7 +81,7 @@ const AddStudent = (props) => {
 
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header>
-          <Modal.Title>Add Question</Modal.Title>
+          <Modal.Title>Thêm Sinh Viên</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="login__content-wrapper">
