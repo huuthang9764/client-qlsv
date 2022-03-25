@@ -59,7 +59,7 @@ const ContentItem = () => {
               </div>
               {/* Card Body */}
               <div className="card-body">
-                <div className="chart-area">
+                <div className="chart-area" style={{ height: "100%" }}>
                   <table className="table table-hover">
                     <thead>
                       <tr>
@@ -77,7 +77,7 @@ const ContentItem = () => {
                     <tbody>
                       {student.map((item, i) => (
                         <tr key={i}>
-                          <td>{item.id}</td>
+                          <td>{i + 1}</td>
                           <td>{item.hoten}</td>
                           <td>{item.ngaysinh}</td>
                           <td>{item.mssv}</td>
