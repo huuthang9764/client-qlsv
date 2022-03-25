@@ -75,7 +75,7 @@ const AddStudent = (props) => {
     <>
       <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
         <Button variant="primary" onClick={handleShow}>
-          Add Question
+          Thêm Sinh Viên
         </Button>
       </div>
 
