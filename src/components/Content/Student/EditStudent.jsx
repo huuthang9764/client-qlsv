@@ -1,13 +1,9 @@
-import classApi from "api/classapi";
-import facultyApi from "api/facultyapi";
 import axios from "axios";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
-const AddStudent = (props) => {
-  const [faculty, setFaculty] = useState([]);
-  const [lop, setLop] = useState([]);
+const EditStudent = ({ data, lop, faculty }) => {
   const [student, setStudent] = useState({
     hoten: "",
     ngaysinh: "",
@@ -21,67 +17,52 @@ const AddStudent = (props) => {
   });
 
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
+
+  let b = [...faculty];
+  let a = b.filter((e) => e.id === data.makhoa);
+  console.log(a, "data");
+  console.log(data.id, "passs");
+  const id = data.id;
   const handleShow = () => setShow(true);
 
   const handleForm = (e) => {
     setStudent({ ...student, [e.target.name]: e.target.value });
   };
-  useEffect(() => {
-    (async () => {
-      try {
-        let token = localStorage.getItem("token");
-        const res = await facultyApi.getFaculty(token);
-        setFaculty(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
-  useEffect(() => {
-    (async () => {
-      try {
-        let token = localStorage.getItem("token");
-        const res = await classApi.getClass(token);
-        setLop(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
 
-  const add = (data) => {
-    console.log(data);
+  const edit = (data) => {
+    console.log(data, "id");
     let token = localStorage.getItem("token");
     axios
-      .post("https://xdpm.herokuapp.com/api/students", data, {
+      .put(`https://xdpm.herokuapp.com/api/students/${id}`, data, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `Bearer ${token}`,
         },
       })
+
       .then((res) => {
-        window.location.assign("/");
+        console.log(res.data);
+        // window.location.assign("/");
       })
       .catch((error) => console.log(error));
   };
   const submitForm = (e) => {
     e.preventDefault();
 
-    add(student);
+    edit(student);
   };
   return (
     <>
       <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
         <Button variant="primary" onClick={handleShow}>
-          Thêm Sinh Viên
+          sửa
         </Button>
       </div>
 
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header>
-          <Modal.Title>Thêm Sinh Viên</Modal.Title>
+          <Modal.Title>Sửa Thông tin Sinh Viên</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="login__content-wrapper">
@@ -94,7 +75,7 @@ const AddStudent = (props) => {
                   <input
                     type="text"
                     name="hoten"
-                    placeholder="Nguyen Huu Thang"
+                    defaultValue={`${data.hoten}`}
                     onChange={(e) => handleForm(e)}
                     required
                   />
@@ -112,6 +93,7 @@ const AddStudent = (props) => {
                   <input
                     type="date"
                     name="ngaysinh"
+                    defaultValue={`${data.ngaysinh}`}
                     onChange={(e) => handleForm(e)}
                     required
                   />
@@ -129,6 +111,7 @@ const AddStudent = (props) => {
                   <input
                     type="text"
                     name="diachi"
+                    defaultValue={`${data.diachi}`}
                     onChange={(e) => handleForm(e)}
                     required
                   />
@@ -146,6 +129,7 @@ const AddStudent = (props) => {
                   <input
                     type="text"
                     name="mssv"
+                    defaultValue={`${data.mssv}`}
                     onChange={(e) => handleForm(e)}
                     required
                   />
@@ -162,11 +146,23 @@ const AddStudent = (props) => {
                 <div className="form__input">
                   <select name="makhoa" onChange={(e) => handleForm(e)}>
                     {faculty.map((item, i) => (
-                      <option key={i} value={item.id} required>
+                      <option
+                        selected={item.id === data.makhoa ? true : false}
+                        key={i}
+                        value={item.id}
+                        required
+                      >
                         {item.tenkhoa}
                       </option>
                     ))}
                   </select>
+
+                  {/* <input
+                    type="text"
+                    name="makhoa"
+                    onChange={(e) => handleForm(e)}
+                    required
+                  /> */}
                 </div>
               </div>
               <div className="input__err">
@@ -180,7 +176,7 @@ const AddStudent = (props) => {
                 <div className="form__input">
                   <select name="malop" onChange={(e) => handleForm(e)}>
                     {lop.map((item, i) => (
-                      <option value={item.id} key={i} required>
+                      <option value={item.id} key={i}>
                         {item.tenlop}
                       </option>
                     ))}
@@ -199,6 +195,7 @@ const AddStudent = (props) => {
                   <input
                     type="text"
                     name="khoahoc"
+                    defaultValue={`${data.khoahoc}`}
                     onChange={(e) => handleForm(e)}
                     required
                   />
@@ -216,6 +213,7 @@ const AddStudent = (props) => {
                   <input
                     type="text"
                     name="hedaotao"
+                    defaultValue={`${data.hedaotao}`}
                     onChange={(e) => handleForm(e)}
                     required
                   />
@@ -234,6 +232,7 @@ const AddStudent = (props) => {
                     type="file"
                     name="hinh"
                     accept="image/*"
+                    // defaultValue={`${data.hinh}`}
                     onChange={(e) => handleForm(e)}
                     required
                   />
@@ -251,7 +250,7 @@ const AddStudent = (props) => {
             Close
           </Button>
           <input
-            value={"Thêm Sinh Viên"}
+            value={"Sửa Thông Tin Sinh Viên"}
             type="submit"
             className="btn btn-primary"
             onClick={(e) => submitForm(e)}
@@ -262,4 +261,4 @@ const AddStudent = (props) => {
   );
 };
 
-export default AddStudent;
+export default EditStudent;

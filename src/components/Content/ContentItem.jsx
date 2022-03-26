@@ -3,10 +3,14 @@ import studentApi from "api/studentapi";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AddStudent from "./Student/AddStudent";
+import EditStudent from "./Student/EditStudent";
+import facultyApi from "api/facultyapi";
+import classApi from "api/classapi";
 
 const ContentItem = () => {
   const [student, setStudent] = useState([]);
-  console.log(student);
+  const [faculty, setFaculty] = useState([]);
+  const [lop, setLop] = useState([]);
   useEffect(() => {
     (async () => {
       try {
@@ -14,6 +18,28 @@ const ContentItem = () => {
         const res = await studentApi.getStudents(token);
         setStudent(res.data);
         console.log(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        let token = localStorage.getItem("token");
+        const res = await facultyApi.getFaculty(token);
+        setFaculty(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        let token = localStorage.getItem("token");
+        const res = await classApi.getClass(token);
+        setLop(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -86,16 +112,25 @@ const ContentItem = () => {
                           <td>{item.khoahoc}</td>
                           <td>{item.hedaotao}</td>
                           <td>
-                            <a
+                            <EditStudent
+                              data={item}
+                              faculty={faculty}
+                              lop={lop}
+                              style={{
+                                zIndex: 100,
+                                cursor: "pointer",
+                                width: "30",
+                              }}
+                            />
+                            {/* <a
                               className="btn btn-primary btn-sm "
                               href="#"
                               role="button"
-                              style={{ zIndex: 100, cursor: "pointer" }}
                               variant="primary"
-                              // onClick={handleShow}
+                              onClick={handleShow}
                             >
                               {"Sửa"}
-                            </a>
+                            </a> */}
                             <a
                               className="btn btn-danger btn-sm "
                               role="button"
