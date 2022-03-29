@@ -21,8 +21,6 @@ const EditStudent = ({ data, lop, faculty }) => {
 
   let b = [...faculty];
   let a = b.filter((e) => e.id === data.makhoa);
-  console.log(a, "data");
-  console.log(data.id, "passs");
   const id = data.id;
   const handleShow = () => setShow(true);
 
@@ -30,11 +28,15 @@ const EditStudent = ({ data, lop, faculty }) => {
     setStudent({ ...student, [e.target.name]: e.target.value });
   };
 
-  const edit = (data) => {
-    console.log(data, "id");
+  const submitForm = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    for (var key in student) {
+      params.append(key, student[key] ? student[key] : data[key]);
+    }
     let token = localStorage.getItem("token");
     axios
-      .put(`https://xdpm.herokuapp.com/api/students/${id}`, data, {
+      .put(`https://xdpm.herokuapp.com/api/students/${id}`, params, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           Authorization: `Bearer ${token}`,
@@ -42,15 +44,9 @@ const EditStudent = ({ data, lop, faculty }) => {
       })
 
       .then((res) => {
-        console.log(res.data);
-        // window.location.assign("/");
+        window.location.reload();
       })
       .catch((error) => console.log(error));
-  };
-  const submitForm = (e) => {
-    e.preventDefault();
-
-    edit(student);
   };
   return (
     <>

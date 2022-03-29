@@ -17,7 +17,6 @@ const ContentItem = () => {
         let token = localStorage.getItem("token");
         const res = await studentApi.getStudents(token);
         setStudent(res.data);
-        console.log(res.data);
       } catch (error) {
         console.log(error);
       }
